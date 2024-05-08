@@ -6,7 +6,21 @@
 </head>
 <body>
     <!-- Injecting linear gauge -->
-    <canvas data-type="linear-gauge"
+    <canvas id="gauge1"
+            data-type="linear-gauge"
+            data-width="160"
+            data-height="600"
+            data-border-radius="20"
+            data-borders="0"
+            data-bar-stroke-width="20"
+            data-minor-ticks="10"
+            data-major-ticks="0,10,20,30,40,50,60,70,80,90,100"
+            data-value="22.3"
+            data-units="°C"
+            data-color-value-box-shadow="false"
+    ></canvas>
+    <canvas id="gauge2"
+            data-type="linear-gauge"
             data-width="160"
             data-height="600"
             data-border-radius="20"
@@ -19,4 +33,23 @@
             data-color-value-box-shadow="false"
     ></canvas>
 </body>
+<script>
+function setGaugeValue(gaugeId,value)
+{
+    document.getElementById(gaugeId).setAttribute("data-value",value);
+}
+function initAjax()
+{
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function()
+    {
+        if (this.readyState == 4 && this.status == 200)
+        {
+            console.log("response from server: " + this.responseText);
+        }
+    };
+    xhttp.open("POST", "/ajax_test");
+    xhttp.send();
+}
+</script>
 </html>

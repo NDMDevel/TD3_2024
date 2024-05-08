@@ -63,6 +63,13 @@ void gauge_lib_handler(AsyncWebServerRequest *request)
 {
     request->send(SPIFFS,"/gauge.min.js");
 }
+void ajax_handler(AsyncWebServerRequest *request)
+{
+    //read from sensors...
+    char data[] = "23.5";
+    request->send(200,"text/plain",data);
+}
+
 void setup()
 {
     Serial.begin(115200);//8N1
@@ -77,6 +84,7 @@ void setup()
     server.on("/home1",home1_handler);
     server.on("/gauge",gauge_handler);
     server.on("/gauge.min.js",gauge_lib_handler);
+    server.on("/ajax_test",ajax_handler);
 
     //server listo para recibir peticiones (de paginas web)
     server.begin();
