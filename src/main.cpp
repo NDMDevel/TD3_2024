@@ -67,12 +67,31 @@ void ajax_handler(AsyncWebServerRequest *request)
 {
     //read from sensors...
     char data[] = "23.5";
+//    Serial.printf("ajax args: %d\n",request->args());
+    for( int i=0 ; i<request->args() ; i++ )
+    {
+        String argName  = request->argName(i);
+        String argValue = request->arg(i);
+        Serial.printf("%s = %s\n",argName.c_str(),argValue.c_str());
+    }
+    if( request->hasParam("led3") )
+    {
+        String state = request->arg("led3");
+        if( state == "on" )
+            digitalWrite(2,HIGH);
+        else
+            digitalWrite(2,LOW);
+    }
     request->send(200,"text/plain",data);
 }
-
+void style_handler(AsyncWebServerRequest *request)
+{
+    request->send(SPIFFS,"/style.css","text/css");
+}
 void setup()
 {
     Serial.begin(115200);//8N1
+    pinMode(2,OUTPUT);
 
     WiFi.softAPConfig( ap_ip , ap_gateway , ap_subnet );
     WiFi.softAP( ap_ssid , ap_pass );
@@ -85,6 +104,7 @@ void setup()
     server.on("/gauge",gauge_handler);
     server.on("/gauge.min.js",gauge_lib_handler);
     server.on("/ajax_test",ajax_handler);
+    server.on("/style.css",style_handler);
 
     //server listo para recibir peticiones (de paginas web)
     server.begin();
@@ -93,6 +113,6 @@ void setup()
 void loop()
 {
 
-    delay(1000);
-    Serial.println("Hello world!\n");
+//    delay(1000);
+//    Serial.println("Hello world!\n");
 }

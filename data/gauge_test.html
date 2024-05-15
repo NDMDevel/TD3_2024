@@ -2,7 +2,9 @@
 <html>
 <head>
     <title>Gauges as Components</title>
-    <script src="/gauge.min.js"></script>
+    <link rel="stylesheet" href="/style.css">
+<!--    <style src="style.css"></style> -->
+    <script src="gauge.min.js"></script>
 </head>
 <body>
     <!-- Injecting linear gauge -->
@@ -32,8 +34,11 @@
             data-units="°C"
             data-color-value-box-shadow="false"
     ></canvas>
+    <input id="number_field" type="number">
 </body>
 <script>
+setInterval( initAjax , 1000 );
+
 function setGaugeValue(gaugeId,value)
 {
     document.getElementById(gaugeId).setAttribute("data-value",value);
@@ -45,10 +50,14 @@ function initAjax()
     {
         if (this.readyState == 4 && this.status == 200)
         {
+            //just for debug
             console.log("response from server: " + this.responseText);
+            //display the data on screen
+            document.getElementById("number_field").value = this.response;
+            setGaugeValue("gauge1",this.response);
         }
     };
-    xhttp.open("POST", "/ajax_test");
+    xhttp.open("GET", "/ajax_test?sensor_temp=0");
     xhttp.send();
 }
 </script>
